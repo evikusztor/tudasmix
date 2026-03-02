@@ -1,112 +1,204 @@
 <!DOCTYPE html>
 <html lang="hu">
 <head>
-<meta charset="UTF-8">
-<title>English Exam Platform</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>English Exam Platform</title>
 
-<script src="https://unpkg.com/react@18/umd/react.development.js"></script>
-<script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
-<script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+  <!-- Stabilabb GitHub Pages-en: React 17 + klasszikus render -->
+  <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
+  <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
 
-<style>
-body { font-family: Arial; max-width: 800px; margin: auto; padding: 20px; }
-button { padding: 8px 14px; margin: 5px 0; cursor: pointer; }
-.card { border: 1px solid #ccc; padding: 15px; border-radius: 6px; margin-bottom: 15px; }
-</style>
+  <style>
+    body { font-family: Arial; max-width: 800px; margin: auto; padding: 20px; }
+    button { padding: 8px 14px; margin: 5px 0; cursor: pointer; }
+    .card { border: 1px solid #ccc; padding: 15px; border-radius: 6px; margin-bottom: 15px; }
+    .muted { opacity: 0.7; font-size: 14px; }
+    .options { display: grid; gap: 8px; margin-top: 10px; }
+    .optionBtn { width: 100%; text-align: left; }
+    .ok { border-color: #2e7d32; }
+    .bad { border-color: #c62828; }
+  </style>
 </head>
 
 <body>
-  <a href="fooldal.html" target="_blank">Test reactrol  foweboldalra </a>
+  <a href="./fooldal.html">⬅ Vissza a főoldalra</a>
 
-<h1>🇬🇧 English Learning Platform - A1–C1</h1>
-<div id="root"></div>
+  <h1>🇬🇧 English Learning Platform - A1–C1</h1>
+  <div id="root"></div>
 
-<script type="text/babel">
+  <script type="text/babel">
+    /* ===== SEGÉDFÜGGVÉNY: TITLE → H3 ===== */
+    function getH3FromTitle(title) {
+      return title.split("–")[0].trim();
+    }
 
-/* ===== SEGÉDFÜGGVÉNY: TITLE → H3 ===== */
-function getH3FromTitle(title) {
-  return title.split("–")[0].trim();
-}
+    /* ===== TANANYAG ===== */
+    const lessons = [
+      {
+        id: 101,
+        title: "Present Simple – Alapok",
+        theory: `
+          <p>HASZNÁLAT</p>
+          <a href="https://nyelvvizsga.hu/nyelvtanulas/angol-tananyagok/az-angol-jelen-ido-kifejezesi-formai/" target="_blank" rel="noopener">JELEN IDŐRŐL ITT</a> <br>
+          <a href="https://nyelvvizsga.hu/nyelvtanulas/angol-tananyagok/az-egyszeru-jelen-az-angolban-present-simple/" target="_blank" rel="noopener">JELEN IDŐRŐL ITT 2</a>
+          <p>
+            SZERKEZETEK: állítás, tagadás, kérdés <br>
+            állítás: I go home. <br>
+            tagadás: I don't go home. <br>
+            kérdés: Do you go home?
+          </p>
+          <p><b>Példa:</b> I <b>go</b> home by car every day.</p>
+        `,
+        questions: [
+          { q: "I ___ to school every day.", options: ["go", "went", "gone"], correct: 0 },
+          { q: "She ___ to work every morning.", options: ["works", "worked", "working"], correct: 0 },
+          { q: "Do they ___ football on weekends?", options: ["play", "played", "playing"], correct: 0 }
+        ]
+      },
+      {
+        id: 102,
+        title: "Present Continuous – Alapok",
+        theory: `
+          <p>
+            - <b>Present Continuous</b>: éppen zajló cselekvés a jelenben <br>
+            - Képzés: <b>am/is/are + -ing</b> <br>
+            - Használat: folyamatban lévő cselekvés, ideiglenes állapot, jövőbeni terv
+          </p>
+          <p><b>Példa állítás:</b> I <b>am reading</b> a book right now.</p>
+          <p><b>Példa kérdés:</b> Are you <b>watching</b> TV at the moment?</p>
+          <p><b>Példa tagadás:</b> She <b>is not working</b> today.</p>
+        `,
+        questions: [
+          { q: "I ___ a movie at the moment.", options: ["am watching", "watch", "watched"], correct: 0 },
+          { q: "She ___ her homework now.", options: ["is doing", "does", "did"], correct: 0 },
+          { q: "They ___ outside currently.", options: ["are playing", "play", "played"], correct: 0 }
+        ]
+      },
+      {
+        id: 103,
+        title: "Present Perfect – Alapok",
+        theory: `
+          <p>
+            - <b>Present Perfect</b>: múltban kezdődött, de a jelenhez kapcsolódó cselekvés <br>
+            - Képzés: <b>have/has + 3. alak (past participle)</b> <br>
+            - Időhatározók: already, just, yet, ever, never, for, since
+          </p>
+          <p><b>Példa állítás:</b> I <b>have visited</b> London twice.</p>
+          <p><b>Példa kérdés:</b> Have you <b>finished</b> your homework yet?</p>
+          <p><b>Példa tagadás:</b> She <b>has not seen</b> that movie.</p>
+        `,
+        questions: [
+          { q: "I ___ this book already.", options: ["have read", "read", "have been reading"], correct: 0 },
+          { q: "She ___ to Paris three times.", options: ["has been", "has gone", "has visited"], correct: 2 },
+          { q: "They ___ their homework yet?", options: ["Have finished", "Have they finished", "Did they finish"], correct: 1 }
+        ]
+      },
+      {
+        id: 104,
+        title: "Used to / Would – Alapok",
+        theory: `
+          <p>
+            - <b>used to</b>: régi, megszokott cselekvések a múltban, amelyek már nem történnek <br>
+            - <b>would</b>: múltbeli ismétlődő cselekvések, gyakran történetmesélésnél
+          </p>
+          <p><b>Példa used to:</b> I <b>used to live</b> in London.</p>
+          <p><b>Példa would:</b> When I was a child, we <b>would visit</b> my grandparents every Sunday.</p>
+        `,
+        questions: [
+          { q: "When I was a kid, I ___ play outside every day.", options: ["used to", "would", "am used to"], correct: 0 },
+          { q: "Every summer, we ___ go on holiday to Italy.", options: ["used to", "would", "will"], correct: 1 },
+          { q: "I ___ wake up early now, it’s a habit.", options: ["used to", "would", "am used to"], correct: 2 }
+        ]
+      }
+    ]; // <- fontos: legyen lezárva
 
-/* ===== TANANYAG ===== */
-const lessons = [
-  {
-    id: 101,
-    title: "Present Simple – Alapok",
-    theory: `
-      <p>HASZNÁLAT</p>
-      <a href="https://nyelvvizsga.hu/nyelvtanulas/angol-tananyagok/az-angol-jelen-ido-kifejezesi-formai/" target="_blank">JELEN IDŐRŐL ITT</a> <br>
-      <a href="https://nyelvvizsga.hu/nyelvtanulas/angol-tananyagok/az-egyszeru-jelen-az-angolban-present-simple/" target="_blank">JELEN IDŐRŐL ITT 2</a>
-      <p>
-        SZERKEZETEK: állítás, tagadás, kérdés <br>
-        állítás: I go home. <br>
-        tagadás: I don't go home. <br>
-        kérdés: Do you go home?
-      </p>
-      <p><b>Példa:</b> I <b>go</b> home by car every day.</p>
-    `,
-    questions: [
-      { q: "I ___ to school every day.", options: ["go", "went", "gone"], correct: 0 },
-      { q: "She ___ to work every morning.", options: ["works", "worked", "working"], correct: 0 },
-      { q: "Do they ___ football on weekends?", options: ["play", "played", "playing"], correct: 0 }
-    ]
-  },
+    function App() {
+      const [selectedId, setSelectedId] = React.useState(lessons[0].id);
+      const [answers, setAnswers] = React.useState({}); // { lessonId: { qIndex: optionIndex } }
 
-  {
-    id: 102,
-    title: "Present Continuous – Alapok",
-    theory: `
-      <p>
-      - <b>Present Continuous</b>: éppen zajló cselekvés a jelenben <br>
-      - Képzés: <b>am/is/are + -ing</b> <br>
-      - Használat: folyamatban lévő cselekvés, ideiglenes állapot, jövőbeni terv
-      </p>
-      <p><b>Példa állítás:</b> I <b>am reading</b> a book right now.</p>
-      <p><b>Példa kérdés:</b> Are you <b>watching</b> TV at the moment?</p>
-      <p><b>Példa tagadás:</b> She <b>is not working</b> today.</p>
-    `,
-    questions: [
-      { q: "I ___ a movie at the moment.", options: ["am watching", "watch", "watched"], correct: 0 },
-      { q: "She ___ her homework now.", options: ["is doing", "does", "did"], correct: 0 },
-      { q: "They ___ outside currently.", options: ["are playing", "play", "played"], correct: 0 }
-    ]
-  },
+      const lesson = lessons.find(l => l.id === selectedId);
 
-  {
-    id: 103,
-    title: "Present Perfect – Alapok",
-    theory: `
-      <p>
-      - <b>Present Perfect</b>: múltban kezdődött, de a jelenhez kapcsolódó cselekvés <br>
-      - Képzés: <b>have/has + 3. alak (past participle)</b> <br>
-      - Időhatározók: already, just, yet, ever, never, for, since
-      </p>
-      <p><b>Példa állítás:</b> I <b>have visited</b> London twice.</p>
-      <p><b>Példa kérdés:</b> Have you <b>finished</b> your homework yet?</p>
-      <p><b>Példa tagadás:</b> She <b>has not seen</b> that movie.</p>
-    `,
-    questions: [
-      { q: "I ___ this book already.", options: ["have read", "read", "have been reading"], correct: 0 },
-      { q: "She ___ to Paris three times.", options: ["has been", "has gone", "has visited"], correct: 2 },
-      { q: "They ___ their homework yet?", options: ["Have finished", "Have they finished", "Did they finish"], correct: 1 }
-    ]
-  },
+      function choose(lessonId, qIndex, optIndex) {
+        setAnswers(prev => ({
+          ...prev,
+          [lessonId]: { ...(prev[lessonId] || {}), [qIndex]: optIndex }
+        }));
+      }
 
-  {
-    id: 104,
-    title: "Used to / Would – Alapok",
-    theory: `
-      <p>
-      - <b>used to</b>: régi, megszokott cselekvések a múltban, amelyek már nem történnek → I used to play football every weekend. <br>
-      - <b>would</b>: múltbeli ismétlődő cselekvések, gyakran történetmesélésnél → Every summer we would go to the lake.
-      </p>
-      <p><b>Példa used to:</b> I <b>used to live</b> in London.</p>
-      <p><b>Példa would:</b> When I was a child, we <b>would visit</b> my grandparents every Sunday.</p>
-    `,
-    questions: [
-      { q: "When I was a kid, I ___ play outside every day.", options: ["used to", "would", "am used to"], correct: 0 },
-      { q: "Every summer, we ___ go on holiday to Italy.", options: ["used to", "would", "will"], correct: 1 },
-      { q: "I ___ wake up early now, it’s a habit.", options: ["used to", "would", "am used to"], correct: 2 }
-    ]
-  }
-  
+      function scoreForLesson(lessonId) {
+        const l = lessons.find(x => x.id === lessonId);
+        const a = answers[lessonId] || {};
+        let score = 0;
+        l.questions.forEach((qq, i) => {
+          if (a[i] === qq.correct) score++;
+        });
+        return score;
+      }
+
+      return (
+        <div>
+          <div className="card">
+            <h2>Leckék</h2>
+            {lessons.map(l => (
+              <button
+                key={l.id}
+                onClick={() => setSelectedId(l.id)}
+                style={{ width: "100%", textAlign: "left" }}
+              >
+                {getH3FromTitle(l.title)} <span className="muted">({l.title})</span>
+              </button>
+            ))}
+          </div>
+
+          <div className="card">
+            <h2>{lesson.title}</h2>
+            <div dangerouslySetInnerHTML={{ __html: lesson.theory }} />
+          </div>
+
+          <div className="card">
+            <h2>Gyakorlás</h2>
+            {lesson.questions.map((qq, idx) => {
+              const chosen = (answers[lesson.id] || {})[idx];
+              const isCorrect = chosen === qq.correct;
+              const isAnswered = typeof chosen === "number";
+
+              return (
+                <div key={idx} className="card" style={{ marginBottom: 10 }}>
+                  <div><b>{idx + 1}.</b> {qq.q}</div>
+
+                  <div className="options">
+                    {qq.options.map((opt, oi) => (
+                      <button
+                        key={oi}
+                        className="optionBtn"
+                        onClick={() => choose(lesson.id, idx, oi)}
+                      >
+                        {opt}
+                      </button>
+                    ))}
+                  </div>
+
+                  {isAnswered && (
+                    <div className={isCorrect ? "muted" : "muted"} style={{ marginTop: 8 }}>
+                      {isCorrect ? "✅ Helyes!" : `❌ Nem jó. Helyes: ${qq.options[qq.correct]}`}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+
+            <div className="muted">
+              Pontszám: {scoreForLesson(lesson.id)} / {lesson.questions.length}
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    // Render (GitHub Pages-en ez a legstabilabb)
+    ReactDOM.render(<App />, document.getElementById("root"));
+  </script>
+</body>
+</html>
